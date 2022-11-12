@@ -69,6 +69,36 @@ pub fn try_avif_heic<R>(
                 entry_sizes: vec![],
             }
         }
+        // No compatible brand, but fall back to the major brand for compatibility with the `ravif`
+        // crate.
+        else if buffer.cmp(8, 4, b"avif") {
+            ImageInfo {
+                format: ImageFormat::AVIF,
+                ext: "avif",
+                full_ext: "avif",
+                mimetype: "image/avif",
+                size: ImageSize {
+                    width: 0,
+                    height: 0,
+                },
+                entry_sizes: vec![],
+            }
+
+        }
+        // No compatible brand, but fall back to the major brand
+        else if buffer.cmp(8, 4, b"heic") {
+            ImageInfo {
+                format: ImageFormat::HEIC,
+                ext: "heic",
+                full_ext: "heic",
+                mimetype: "image/heic",
+                size: ImageSize {
+                    width: 0,
+                    height: 0,
+                },
+                entry_sizes: vec![],
+            }
+        }
         // invalid
         else {
             return Err(ImageInfoError::UnrecognizedFormat);
